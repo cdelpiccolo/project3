@@ -40,10 +40,10 @@ class CouplingWindow(QtGui.QMainWindow):
         self.nhwin = NH_Dmax_Window()
     
     def create_cn_win(self):
-        self.cnwin = CN_Matrix_Window()  #not yet written
+        self.cnwin = CN_Matrix_Window()  
         
     def create_caha_win(self):
-        self.cahawin = CaHa_Matrix_Window() #not yet written
+        self.cahawin = CaHa_Matrix_Window() 
         
     def coupling_buttons(self):
         """Prompt the user to select the coupling type for the experiment."""   
@@ -72,15 +72,21 @@ class NH_Dmax_Window(QtGui.QMainWindow):
         self.setGeometry(50, 50, 500, 200)
         self.dmax_buttons()
         
+    def create_dmax1_win(self):
+        self.dmax1win = Dmax1_Window() #not yet written
+        
+    def create_dmax2_win(self):
+        self.dmax2win = Dmax2_Window() #not yet written
+        
     def dmax_buttons(self):
         "Prompt the user to choose the scaling factor (Dmax) for the calculations."""    
         dmax1_btn = QtGui.QPushButton("Dmax = 21700", self)
-        #dmax_btn.clicked.connect(NH_Dmax1_Matrix_Window()) #correct way to call the next window?
+        dmax1_btn.clicked.connect(self.create_dmax1_win) 
         dmax1_btn.resize(200, 20)
         dmax1_btn.move(150, 50)
         
         dmax2_btn = QtGui.QPushButton("Dmax = 24850", self)
-        #dmax2_btn.clicked.connect(NH_Dmax2_Matrix_Window()) #next window class
+        dmax2_btn.clicked.connect(self.create_dmax2_win) #next window class to write
         dmax2_btn.resize(200, 20)
         dmax2_btn.move(150, 100)
         
@@ -127,6 +133,56 @@ class CaHa_Matrix_Window(QtGui.QMainWindow):
         
         diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
         #diag_btn.clicked.connect(CaHa_Diag_Window) #next window class
+        diag_btn.resize(300, 20)
+        diag_btn.move(100, 100)
+        
+        self.show()
+        
+class Dmax1_Window(QtGui.QMainWindow):
+    """After the user chooses Dmax=21700 for the scaling factor, \
+    prompt the user to choose whether to input the saupe matrix \
+    or the diagonalized matrix and Euler angles."""
+    def __init__(self):
+        super(Dmax1_Window, self).__init__()
+        self.setWindowTitle("Choose matrix to input:")
+        self.setGeometry(50, 50, 500, 200)
+        self.matrix_buttons()
+        
+    def matrix_buttons(self):
+        "Prompt the user to choose whether to input the saupe matrix or the \
+        diagonalized matrix and Euler angles."""    
+        saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
+        #saupe_btn.clicked.connect()
+        saupe_btn.resize(200, 20)
+        saupe_btn.move(150, 50)
+        
+        diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
+        #diag_btn.clicked.connect() #next window class
+        diag_btn.resize(300, 20)
+        diag_btn.move(100, 100)
+        
+        self.show()
+        
+class Dmax2_Window(QtGui.QMainWindow):
+    """After the user chooses Dmax=21700 for the scaling factor, \
+    prompt the user to choose whether to input the saupe matrix \
+    or the diagonalized matrix and Euler angles."""
+    def __init__(self):
+        super(Dmax2_Window, self).__init__()
+        self.setWindowTitle("Choose matrix to input:")
+        self.setGeometry(50, 50, 500, 200)
+        self.matrix_buttons()
+        
+    def matrix_buttons(self):
+        "Prompt the user to choose whether to input the saupe matrix or the \
+        diagonalized matrix and Euler angles."""    
+        saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
+        #saupe_btn.clicked.connect()
+        saupe_btn.resize(200, 20)
+        saupe_btn.move(150, 50)
+        
+        diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
+        #diag_btn.clicked.connect() #next window class
         diag_btn.resize(300, 20)
         diag_btn.move(100, 100)
         

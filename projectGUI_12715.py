@@ -162,6 +162,16 @@ class Dmax1_Window(QtGui.QMainWindow):
     
     def create_dmax1_saupe_win5(self):
         self.dmax1saupe = Dmax1_Saupe_Window()
+    
+    def create_dmax1_diag_win1(self):
+        self.dmax1diag = Dmax1_Diag_Window()
+        
+    def create_dmax1_diag_win2(self):
+        self.dmax1diag = Dmax1_Diag_Window()
+    
+    def create_dmax1_diag_win3(self):
+        self.dmax1diag = Dmax1_Diag_Window()
+        
         
     def matrix_buttons(self):
         "Prompt the user to choose whether to input the saupe matrix or the \
@@ -172,7 +182,7 @@ class Dmax1_Window(QtGui.QMainWindow):
         saupe_btn.move(150, 50)
         
         diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
-        #diag_btn.clicked.connect() #next window class
+        diag_btn.clicked.connect(self.create_dmax1_diag_win1)
         diag_btn.resize(300, 20)
         diag_btn.move(100, 100)
         
@@ -228,9 +238,14 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_saupewin3()
         self.make_saupewin4()
         self.make_saupewin5()
+        self.make_diagwin1()
+        self.make_diagwin2()
+        self.make_diagwin3()
 #   
     global saupe_list 
     saupe_list = []   #you will need to redefine this for each version?  
+    global diag_list
+    diag_list = []    
     
     def make_saupewin1(self):
         sxx, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
@@ -262,6 +277,37 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         if ok:
             saupe_list.append(syz)
         print saupe_list
+        
+class Dmax1_Diag_Window(QtGui.QWidget):
+    """Prompt the user to input the values of the Saupe matrix."""
+    def __init__(self):
+        super(Dmax1_Diag_Window, self).__init__()
+        self.make_diagwin1()
+        self.make_diagwin2()
+        self.make_diagwin3()
+        
+    global diag_list
+    diag_list = []
+    
+    def make_diagwin1(self):
+        Sxx, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 1',
+                                               'Enter Sxx:', decimals = 5)
+        if ok:
+            diag_list.append(Sxx)
+            
+    def make_diagwin2(self):
+        Syy, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 2',
+                                               'Enter Syy:', decimals = 5)
+        if ok:
+            diag_list.append(Syy)
+            
+    def make_diagwin3(self):
+        Szz, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 3',
+                                               'Enter Szz:', decimals = 5)
+        if ok:
+            diag_list.append(Szz)
+        print diag_list
+                                      
         
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""

@@ -148,11 +148,14 @@ class Dmax1_Window(QtGui.QMainWindow):
         self.setGeometry(50, 50, 500, 200)
         self.matrix_buttons()
         
+    def create_dmax1_saupe_win(self):
+        self.dmax1saupe = Dmax1_Saupe_Window()
+        
     def matrix_buttons(self):
         "Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
-        #saupe_btn.clicked.connect()
+        saupe_btn.clicked.connect(self.create_dmax1_saupe_win)
         saupe_btn.resize(200, 20)
         saupe_btn.move(150, 50)
         
@@ -187,6 +190,34 @@ class Dmax2_Window(QtGui.QMainWindow):
         diag_btn.move(100, 100)
         
         self.show()
+        
+class Dmax1_Saupe_Window(QtGui.QWidget):
+    """Prompt the user to input the values of the Saupe matrix."""
+    def __init__(self):
+        super(Dmax1_Saupe_Window, self).__init__()
+        self.make_saupewin1()
+    
+#    def make_saupewin1(self):
+#        """Make the window for inputting the Saupe matrix."""
+#        #self.entry_line = QtGui.QLineEdit(self)
+#        self.setGeometry(300, 300, 290, 150)
+#        #self.setWindowTitle('Saupe Matrix Input 1')
+#        sxx = QtGui.QInputDialog.getText(self, 'Input Dialog', 
+#                                              'Enter the first element of the \
+#                                              Saupe matrix (sxx):')
+#        saupe_list = []                                          
+#       #if ok:
+#        saupe_list.append(sxx)                                          
+#        self.show()
+#        return saupe_list
+    
+    def make_saupewin1(self):
+        sxx = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
+                                           'Enter sxx:', decimals = 5)
+        saupe_list = []
+        saupe_list.append(sxx[0])
+        print saupe_list
+        return saupe_list
 
 def main():
     app = QtGui.QApplication(sys.argv)

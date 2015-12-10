@@ -285,9 +285,14 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_diagwin1()
         self.make_diagwin2()
         self.make_diagwin3()
+        self.make_eulerwin1()
+        self.make_eulerwin2()
+        self.make_eulerwin3()
         
     global diag_list
     diag_list = []
+    global euler_list
+    euler_list = []
     
     def make_diagwin1(self):
         Sxx, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 1',
@@ -307,7 +312,25 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             diag_list.append(Szz)
         print diag_list
-                                      
+    
+    def make_eulerwin1(self):
+        alpha, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle alpha', 
+                                                 'Enter alpha (in degrees)', decimals = 2)
+        if ok:
+            euler_list.append(alpha)
+        
+    def make_eulerwin2(self):
+        beta, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle beta', 
+                                                 'Enter beta (in degrees)', decimals = 2)                                  
+        if ok:
+            euler_list.append(beta)
+                                        
+    def make_eulerwin3(self):
+        gamma, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle gamma', 
+                                                 'Enter gamma (in degrees)', decimals = 2)
+        if ok:
+            euler_list.append(gamma)
+        print euler_list
         
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""

@@ -10,7 +10,7 @@ Read in experimental Residual Dipolar Couplings
 (RDCs), and read in nitrogen (N) and hydrogen (H) coordinates to calculate the
 expected RDCs from a PDB file. Here, the example used is the substrate-free form
 of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.9.15 
+Adapated from Class 4 assignment. 12.9.15 committed 
 """
 
 import numpy as np

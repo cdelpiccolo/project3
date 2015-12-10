@@ -20,12 +20,14 @@ import matplotlib.pyplot as plt
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
-    def __init__(self, Smatrix, euler_angles, dmax, exp_rdc_file):
+    def __init__(self, Smatrix, euler_angles, exp_rdc_file, hfile, nfile, dmax):
         self.Smatrix = Smatrix
         self.euler_angles = euler_angles
         self.dmax = dmax
         self.exp_rdc_file = exp_rdc_file
-
+        self.hfile = hfile
+        self.nfile = nfile        
+        
     def get_exp_rdcs(self):
         """Read in experimentally observed RDCs from a text file."""
         exp_rdc = np.genfromtxt(self.exp_rdc_file)
@@ -43,8 +45,8 @@ class ResidualDipolarCouplings(object):
     def get_coords(self):
         """Read in the coordinates of the nitrogen (N) and hydrogen (H) residues
            from a text file."""
-        Hcoords = np.genfromtxt("h.txt") #change to user input from GUI
-        Ncoords = np.genfromtxt("n.txt") #change to user input from GUI
+        Hcoords = np.genfromtxt(self.hfile) #change to user input from GUI
+        Ncoords = np.genfromtxt(self.nfile) #change to user input from GUI
        
         #slicing
         H_residues = Hcoords[:,0] 
@@ -129,6 +131,7 @@ class ResidualDipolarCouplings(object):
         
 
 if __name__ == "__main__":
+    #change for new input order and hfile/nfile input    
     x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
     x.get_exp_rdcs()
     x.get_coords()

@@ -150,29 +150,10 @@ class Dmax1_Window(QtGui.QMainWindow):
         
     def create_dmax1_saupe_win1(self):
         self.dmax1saupe = Dmax1_Saupe_Window()
-    
-    def create_dmax1_saupe_win2(self):
-        self.dmax1saupe = Dmax1_Saupe_Window()
-        
-    def create_dmax1_saupe_win3(self):
-        self.dmax1saupe = Dmax1_Saupe_Window()
-    
-    def create_dmax1_saupe_win4(self):
-        self.dmax1saupe = Dmax1_Saupe_Window()
-    
-    def create_dmax1_saupe_win5(self):
-        self.dmax1saupe = Dmax1_Saupe_Window()
-    
+       
     def create_dmax1_diag_win1(self):
         self.dmax1diag = Dmax1_Diag_Window()
-        
-    def create_dmax1_diag_win2(self):
-        self.dmax1diag = Dmax1_Diag_Window()
-    
-    def create_dmax1_diag_win3(self):
-        self.dmax1diag = Dmax1_Diag_Window()
-        
-        
+                
     def matrix_buttons(self):
         "Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
@@ -238,9 +219,10 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_saupewin3()
         self.make_saupewin4()
         self.make_saupewin5()
-        self.make_diagwin1()
-        self.make_diagwin2()
-        self.make_diagwin3()
+        self.make_expRDC_file_win()
+        self.make_residues_file_win()
+        self.make_hcoords_file_win()
+        self.make_ncoords_file_win()
 #   
     global saupe_list 
     saupe_list = []   #you will need to redefine this for each version?  
@@ -278,6 +260,30 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
             saupe_list.append(syz)
         print saupe_list
         
+    def make_expRDC_file_win(self):
+        expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
+                                                    'Enter the name of the experimental RDC file.')
+        if ok:
+            print expRDCfile #to be changed later
+    
+    def make_residues_file_win(self):
+        residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
+                                                       'Enter the name of the file containing the residue numbers.')
+        if ok:
+            print residues_file #to be changed later
+    
+    def make_hcoords_file_win(self):
+        hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
+                                                      'Enter the name of the file containing the H coordinates.')
+        if ok:
+            print hcoords_file #to be changed later
+
+    def make_ncoords_file_win(self):
+        ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
+                                                      'Enter the name of the file containing the N coordinates.')
+        if ok:
+            print ncoords_file #to be changed later
+            
 class Dmax1_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):

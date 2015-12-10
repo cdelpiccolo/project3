@@ -225,9 +225,11 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_ncoords_file_win()
 #   
     global saupe_list 
-    saupe_list = []   #you will need to redefine this for each version?  
+    saupe_list = []    
     global diag_list
-    diag_list = []    
+    diag_list = [] 
+    global params_list 
+    params_list = []
     
     def make_saupewin1(self):
         sxx, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
@@ -277,7 +279,9 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
             print hcoords_file #to be changed later
-
+    
+        
+    
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
@@ -294,11 +298,17 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_eulerwin1()
         self.make_eulerwin2()
         self.make_eulerwin3()
+        self.make_expRDC_file_win()
+        self.make_residues_file_win()
+        self.make_hcoords_file_win()
+        self.make_ncoords_file_win()
         
     global diag_list
     diag_list = []
     global euler_list
     euler_list = []
+    global params_list
+    params_list = []
     
     def make_diagwin1(self):
         Sxx, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 1',
@@ -318,7 +328,8 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             diag_list.append(Szz)
         print diag_list
-    
+        params_list.append(diag_list)        
+        
     def make_eulerwin1(self):
         alpha, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle alpha', 
                                                  'Enter alpha (in degrees)', decimals = 2)
@@ -337,7 +348,43 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             euler_list.append(gamma)
         print euler_list
-        
+        params_list.append(euler_list)
+    
+    def make_expRDC_file_win(self):
+        expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
+                                                    'Enter the name of the experimental RDC file.')
+        if ok:
+            print expRDCfile #to be changed later
+    
+    def make_residues_file_win(self):
+        residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
+                                                       'Enter the name of the file containing the residue numbers.')
+        if ok:
+            print residues_file #to be changed later
+            params_list.append(residues_file)
+    
+    def make_hcoords_file_win(self):
+        hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
+                                                      'Enter the name of the file containing the H coordinates.')
+        if ok:
+            print hcoords_file #to be changed later
+            params_list.append(hcoords_file)
+    
+    def make_ncoords_file_win(self):
+        ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
+                                                      'Enter the name of the file containing the N coordinates.')
+        if ok:
+            print ncoords_file #to be changed later
+            params_list.append(ncoords_file)
+            
+            params_list.append(21700) #make new function for this?
+            print params_list
+    
+    #Smatrix, euler_angles, exp_rdc_file, hfile, nfile
+    #import calc rdc file
+    
+    
+    
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):

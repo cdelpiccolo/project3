@@ -132,7 +132,8 @@ class ResidualDipolarCouplings(object):
 
 if __name__ == "__main__":
     #change for new input order and hfile/nfile input    
-    x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
+    #x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
+    x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 21700)
     x.get_exp_rdcs()
     x.get_coords()
     x.do_matrix_operations()

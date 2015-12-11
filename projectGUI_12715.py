@@ -8,6 +8,7 @@ Created on Fri Nov 27 21:59:53 2015
 import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
+import calc_rdc_dmax1_diag
 
 class IntroWindow(QtGui.QMainWindow):
     """Greet the user, ask the user to enter the application."""
@@ -233,31 +234,31 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
     
     def make_saupewin1(self):
         sxx, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
-                                           'Enter sxx:', decimals = 5)        
+                                           'Enter sxx:', decimals = 10)        
         if ok:
             saupe_list.append(sxx)
             
     def make_saupewin2(self):
         syy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 2', 
-                                           'Enter syy:', decimals = 5)
+                                           'Enter syy:', decimals = 10)
         if ok:
             saupe_list.append(syy)
             
     def make_saupewin3(self):
         sxy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 3', 
-                                           'Enter sxy:', decimals = 5)        
+                                           'Enter sxy:', decimals = 10)        
         if ok:
             saupe_list.append(sxy)
     
     def make_saupewin4(self):
         sxz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 4', 
-                                           'Enter sxz:', decimals = 5)
+                                           'Enter sxz:', decimals = 10)
         if ok:
             saupe_list.append(sxz)
             
     def make_saupewin5(self):
         syz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 5', 
-                                           'Enter syz:', decimals = 5)
+                                           'Enter syz:', decimals = 10)
         if ok:
             saupe_list.append(syz)
         print saupe_list
@@ -302,6 +303,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_residues_file_win()
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
+        self.run_rdc_calc()
         
     global diag_list
     diag_list = []
@@ -312,19 +314,19 @@ class Dmax1_Diag_Window(QtGui.QWidget):
     
     def make_diagwin1(self):
         Sxx, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 1',
-                                               'Enter Sxx:', decimals = 5)
+                                               'Enter Sxx:', decimals = 10)
         if ok:
             diag_list.append(Sxx)
             
     def make_diagwin2(self):
         Syy, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 2',
-                                               'Enter Syy:', decimals = 5)
+                                               'Enter Syy:', decimals = 10)
         if ok:
             diag_list.append(Syy)
             
     def make_diagwin3(self):
         Szz, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 3',
-                                               'Enter Szz:', decimals = 5)
+                                               'Enter Szz:', decimals = 10)
         if ok:
             diag_list.append(Szz)
         print diag_list
@@ -355,13 +357,14 @@ class Dmax1_Diag_Window(QtGui.QWidget):
                                                     'Enter the name of the experimental RDC file.')
         if ok:
             print expRDCfile #to be changed later
+            params_list.append(expRDCfile)
     
     def make_residues_file_win(self):
         residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
                                                        'Enter the name of the file containing the residue numbers.')
         if ok:
             print residues_file #to be changed later
-            params_list.append(residues_file)
+            #params_list.append(residues_file)  #maybe don't need this file??
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -382,9 +385,14 @@ class Dmax1_Diag_Window(QtGui.QWidget):
     
     #Smatrix, euler_angles, exp_rdc_file, hfile, nfile
     #import calc rdc file
-    
-    
-    
+
+    def run_rdc_calc(self):
+        rdcrun = calc_rdc_dmax1_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
+        rdcrun.get_exp_rdcs()
+        rdcrun.get_coords()
+        rdcrun.do_matrix_operations()
+        rdcrun.back_calculate_rdcs()
+       
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):
@@ -400,31 +408,31 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
     
     def make_saupewin1(self):
         sxx, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
-                                           'Enter sxx:', decimals = 5)        
+                                           'Enter sxx:', decimals = 10)                                          
         if ok:
             saupe_list.append(sxx)
     
     def make_saupewin2(self):
         syy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 2', 
-                                           'Enter syy:', decimals = 5)
+                                           'Enter syy:', decimals = 10)
         if ok:
             saupe_list.append(syy)
             
     def make_saupewin3(self):
         sxy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 3', 
-                                           'Enter sxy:', decimals = 5)        
+                                           'Enter sxy:', decimals = 10)        
         if ok:
             saupe_list.append(sxy)
     
     def make_saupewin4(self):
         sxz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 4', 
-                                           'Enter sxz:', decimals = 5)
+                                           'Enter sxz:', decimals = 10)
         if ok:
             saupe_list.append(sxz)
             
     def make_saupewin5(self):
         syz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 5', 
-                                           'Enter syz:', decimals = 5)
+                                           'Enter syz:', decimals = 10)
         if ok:
             saupe_list.append(syz)
         print saupe_list

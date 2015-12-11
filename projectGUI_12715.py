@@ -13,6 +13,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
 import calc_rdc_dmax1_diag
+import qfactor_gui
 import pandas as pd
 import seaborn as sns
 
@@ -369,9 +370,9 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
-            exp_rdcs = np.genfromtxt(expRDCfile)
-            np.savetxt("exp_rdcs.csv", exp_rdcs)
-            #print exp_rdcs
+#            exp_rdcs = np.genfromtxt(expRDCfile)
+#            np.savetxt("exp_rdcs.csv", exp_rdcs)
+            
     
     def make_residues_file_win(self):
         residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
@@ -407,7 +408,8 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         rdcrun.do_matrix_operations()
         rdcrun.back_calculate_rdcs()
         #rdcrun.manip_rdc_df() #figure out how to get exp_rdc file
-        #rdcrun.qfactor() #not recognizing square function?
+        qcalc = qfactor_gui.Qfactor()
+        qcalc.qfactor()
      
        
 class Dmax2_Saupe_Window(QtGui.QWidget):

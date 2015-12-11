@@ -13,6 +13,7 @@ import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
 import calc_rdc_dmax1_diag
+import calc_rdc_dmax1_saupe
 import qfactor_gui
 import pandas as pd
 import seaborn as sns
@@ -230,6 +231,7 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_expRDC_file_win()
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
+        self.run_rdc_calc()
 #   
     global saupe_list 
     saupe_list = []    
@@ -267,25 +269,39 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
                                            'Enter syz:', decimals = 10)
         if ok:
             saupe_list.append(syz)
+            params_list.append(saupe_list)
         print saupe_list
+        
         
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
             print expRDCfile #to be changed later
+            params_list.append(expRDCfile)
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
             print hcoords_file #to be changed later
+            params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
             print ncoords_file #to be changed later
+            params_list.append(ncoords_file)
+            params_list.append(21700)
+    
+    def run_rdc_calc(self):
+        rdcrun = calc_rdc_dmax1_saupe.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4])
+        rdcrun.get_exp_rdcs()
+        rdcrun.get_coords()
+        rdcrun.back_calculate_rdcs()
+        qcalc = qfactor_gui.Qfactor()
+        qcalc.qfactor()
             
 class Dmax1_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -301,10 +317,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
-#        self.get_exp_rdcs()
-#        self.get_calc_rdcs()
-#        self.make_rdc_df()
-#        self.manip_rdc_df()
         
         
     global diag_list
@@ -378,9 +390,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
             params_list.append(ncoords_file)
             
             params_list.append(21700) #make new function for this?
-       
-    #Smatrix, euler_angles, exp_rdc_file, hfile, nfile
-    #import calc rdc file
 
     def run_rdc_calc(self):
         rdcrun = calc_rdc_dmax1_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
@@ -388,7 +397,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         rdcrun.get_coords()
         rdcrun.do_matrix_operations()
         rdcrun.back_calculate_rdcs()
-        #rdcrun.manip_rdc_df() #figure out how to get exp_rdc file
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
      

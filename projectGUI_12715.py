@@ -7,6 +7,8 @@ Created on Fri Nov 27 21:59:53 2015
 
 import numpy as np
 import scipy as sp
+from math import *
+import time, sys, os, math, copy, re
 import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
@@ -308,10 +310,10 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
-        self.get_exp_rdcs()
-        self.get_calc_rdcs()
-        self.make_rdc_df()
-        self.manip_rdc_df()
+#        self.get_exp_rdcs()
+#        self.get_calc_rdcs()
+#        self.make_rdc_df()
+#        self.manip_rdc_df()
         
         
     global diag_list
@@ -367,6 +369,9 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
+            #print exp_rdcs
     
     def make_residues_file_win(self):
         residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
@@ -390,59 +395,20 @@ class Dmax1_Diag_Window(QtGui.QWidget):
             params_list.append(ncoords_file)
             
             params_list.append(21700) #make new function for this?
-
+    
     
     #Smatrix, euler_angles, exp_rdc_file, hfile, nfile
     #import calc rdc file
 
     def run_rdc_calc(self):
-        exp_rdcs = params_list[2]
         rdcrun = calc_rdc_dmax1_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
         rdcrun.get_exp_rdcs()
         rdcrun.get_coords()
         rdcrun.do_matrix_operations()
         rdcrun.back_calculate_rdcs()
         #rdcrun.manip_rdc_df() #figure out how to get exp_rdc file
+        #rdcrun.qfactor() #not recognizing square function?
      
-    #pandas 
-     
-    def get_exp_rdcs(self):
-        """Read in experimentally observed RDCs and the associated residue numbers
-           from a csv file and construct a pandas DataFrame."""
-        exp_df = pd.read_csv(params_list[2])
-        return exp_df
-        
-    def get_calc_rdcs(self):
-        """Read in back-calculated RDCs from a csv file
-           and construct a pandas dataframe."""
-        calc_df = pd.read_csv('calc_rdcs.csv')
-        return calc_df
-        
-    def make_rdc_df(self):
-        """Concatenate the experimental and back-calculated RDCs into a single DataFrame."""
-        exp_df = self.get_exp_rdcs()
-        calc_df = self.get_calc_rdcs()
-        exp_df = pd.DataFrame(exp_df, columns=['Residue Number', 'Experimental RDC'])
-        calc_df = pd.DataFrame(calc_df, columns=['Back-Calculated RDC'])
-        rdc_df = pd.concat([exp_df, calc_df], axis=1)
-        print rdc_df
-        return rdc_df
-        
-    def manip_rdc_df(self):
-        """Manipulate the rdc dataframe using methods in pandas."""
-        rdc_df = self.make_rdc_df()
-        print "The first three RDCs are: ", rdc_df.head(3)
-        print "The last three RDCs are: ", rdc_df.tail(3)
-        basic_stats = rdc_df.describe()
-        print basic_stats
-        filter_outliers = rdc_df[abs(rdc_df['Experimental RDC']) > 15]  #possible outliers     
-        filter_outliers = pd.DataFrame.dropna(filter_outliers, subset=['Experimental RDC', 'Back-Calculated RDC'])
-        print "Possible outliers: ", filter_outliers
-        
-        exp_rdc_plot = sns.jointplot(x="Residue Number", y="Experimental RDC", data=rdc_df)
-        print exp_rdc_plot
-        pairplot = sns.pairplot(rdc_df, vars=['Experimental RDC', 'Back-Calculated RDC'])
-        print pairplot
        
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""

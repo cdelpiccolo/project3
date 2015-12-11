@@ -16,7 +16,10 @@ Adapated from Class 4 assignment. 12.9.15 committed
 import numpy as np
 from scipy import linalg
 from math import *
+import time, sys, os, math, copy, re
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
@@ -126,8 +129,29 @@ class ResidualDipolarCouplings(object):
             rdc = (sxx*sc1) + (syy*sc2) + (sxy*sc3) + (sxz*sc4) + (syz*sc5)
             rdc_list.append(rdc)
             rdcs = np.array(rdc_list)
-        print("Number of calculated RDCs: ", rdcs.size)   #remove later
-        print("First five calculated RDCs: ", rdcs[0:5])  #remove later
+            np.savetxt("calc_rdcs.csv", rdcs)
+            return rdcs
+        #print("Number of calculated RDCs: ", rdcs.size)   #remove later
+        #print("First five calculated RDCs: ", rdcs[0:5])  #remove later
+        
+    def qfactor(self):
+        exp_rdcs = self.get_exp_rdcs()
+        calc_rdcs = self.back_calculate_rdcs()
+        rdczip = zip(exp_rdcs, calc_rdcs)
+        diff_list = []
+        for t in rdczip:
+            diff = t[0] - t[1]
+            diff_list.append(diff)
+        sqdiff = np.square(diff_list)
+        numerator = sum(sqdiff)
+        sqobs = np.square(exp_rdcs)
+        denominator = sum(sqobs)
+        Q = sqrt(numerator / denominator)
+        Q = np.around(Q, 6)
+        print 'Q:', Q
+        return Q  
+
+
         
 
 if __name__ == "__main__":

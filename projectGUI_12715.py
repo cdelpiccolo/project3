@@ -228,7 +228,6 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_saupewin4()
         self.make_saupewin5()
         self.make_expRDC_file_win()
-        self.make_residues_file_win()
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
 #   
@@ -276,19 +275,11 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
     
-    def make_residues_file_win(self):
-        residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
-                                                       'Enter the name of the file containing the residue numbers.')
-        if ok:
-            print residues_file #to be changed later
-    
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
             print hcoords_file #to be changed later
-    
-        
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
@@ -307,7 +298,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_eulerwin2()
         self.make_eulerwin3()
         self.make_expRDC_file_win()
-        self.make_residues_file_win()
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
@@ -372,14 +362,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
             params_list.append(expRDCfile)
 #            exp_rdcs = np.genfromtxt(expRDCfile)
 #            np.savetxt("exp_rdcs.csv", exp_rdcs)
-            
-    
-    def make_residues_file_win(self):
-        residues_file, ok = QtGui.QInputDialog.getText(self, 'Residues file',
-                                                       'Enter the name of the file containing the residue numbers.')
-        if ok:
-            print residues_file #to be changed later
-            #params_list.append(residues_file)  #maybe don't need this file??
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -396,8 +378,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
             params_list.append(ncoords_file)
             
             params_list.append(21700) #make new function for this?
-    
-    
+       
     #Smatrix, euler_angles, exp_rdc_file, hfile, nfile
     #import calc rdc file
 

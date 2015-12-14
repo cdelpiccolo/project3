@@ -29,7 +29,7 @@ class ResidualDipolarCouplings(object):
         self.euler_angles = euler_angles
         self.dmax = dmax
         self.exp_rdc_file = exp_rdc_file
-        self.hfile = hfile
+        self.cfile = cfile
         self.nfile = nfile        
         
     def get_exp_rdcs(self):
@@ -38,16 +38,16 @@ class ResidualDipolarCouplings(object):
         return exp_rdc
 
     def get_coords(self):
-        """Read in the coordinates of the nitrogen (N) and hydrogen (H) residues
+        """Read in the coordinates of the carbon (C) and nitrogen (N) residues
            from a text file."""
-        Hcoords = np.genfromtxt(self.hfile) #change to user input from GUI
+        Ccoords = np.genfromtxt(self.hfile) #change to user input from GUI
         Ncoords = np.genfromtxt(self.nfile) #change to user input from GUI
        
         #slicing
-        H_residues = Hcoords[:,0] 
-        H_xcoords = Hcoords[:,1]
-        H_ycoords = Hcoords[:,2]
-        H_zcoords = Hcoords[:,3]
+        C_residues = Ccoords[:,0] 
+        C_xcoords = Ccoords[:,1]
+        C_ycoords = Ccoords[:,2]
+        C_zcoords = Ccoords[:,3]
         
         N_residues = Ncoords[:,0]
         N_xcoords = Ncoords[:,1]
@@ -55,9 +55,9 @@ class ResidualDipolarCouplings(object):
         N_zcoords = Ncoords[:,3]
         
         #element-wise subtraction
-        dx = H_xcoords - N_xcoords
-        dy = H_ycoords - N_ycoords
-        dz = H_zcoords - N_zcoords
+        dx = C_xcoords - N_xcoords
+        dy = C_ycoords - N_ycoords
+        dz = C_zcoords - N_zcoords
         return dx, dy, dz
 
     def do_matrix_operations(self):
@@ -72,7 +72,7 @@ class ResidualDipolarCouplings(object):
         beta_deg = euler_angles[1]
         gamma_deg = euler_angles[2]
         
-        #convert to degrees -- RADIANS??
+        #convert to radians
         alpha = alpha_deg*(pi/180)
         beta = beta_deg*(pi/180)
         gamma = gamma_deg*(pi/180)
@@ -123,14 +123,8 @@ class ResidualDipolarCouplings(object):
         rdcs = np.array(rdc_list)
         np.savetxt("calc_rdcs.csv", rdcs)
         return rdcs
-        #print("Number of calculated RDCs: ", rdcs.size)   #remove later
-        #print("First five calculated RDCs: ", rdcs[0:5])  #remove later
- 
         
-
 if __name__ == "__main__":
-    #change for new input order and hfile/nfile input    
-    #x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
     x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 6125)
     x.get_exp_rdcs()
     x.get_coords()

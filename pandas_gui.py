@@ -15,18 +15,33 @@ class Pandas(object):
     
     def __init__(self):
         pass
+    
+    def edit_csv(self):
+        with open('exp_rdcs.csv') as infile:
+          with open('exp_rdcs2.csv', 'w') as outfile:
+            for line in infile:
+              fields = line.split(' ')
+              outfile.write(', '.join(fields))
+        
+        df = pd.read_csv('exp_rdcs2.csv')
+        df.columns = 'Residue Number', 'Experimental RDC'
+        df.to_csv('exp_rdcs3.csv')
+        
+        df2 = pd.read_csv('calc_rdcs.csv')
+        df2.columns = ['Back-Calculated RDC']
+        df2.to_csv('calc_rdcs2.csv')
      
     def get_exp_rdcs(self):
         """Read in experimentally observed RDCs and the associated residue numbers
            from a csv file and construct a pandas DataFrame."""
-        exp_df = pd.read_csv('exp_rdcs.csv')
+        exp_df = pd.read_csv('exp_rdcs3.csv')
         print exp_df
         return exp_df
         
     def get_calc_rdcs(self):
         """Read in back-calculated RDCs from a csv file
            and construct a pandas dataframe."""
-        calc_df = pd.read_csv('calc_rdcs.csv')
+        calc_df = pd.read_csv('calc_rdcs2.csv')
         print calc_df
         return calc_df
         
@@ -74,7 +89,9 @@ class Pandas(object):
 #    
 if __name__ == "__main__":
     x = Pandas()
-    x.get_exp_rdcs()
-    x.get_calc_rdcs()
-    x.make_rdc_df()
-    #x.make_rdc_df()
+    x.edit_csv()
+    x.manip_rdc_df()
+#    x.get_exp_rdcs()
+#    x.get_calc_rdcs()
+#    x.make_rdc_df()
+#    x.make_rdc_df()

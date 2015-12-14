@@ -123,12 +123,12 @@ class CN_Matrix_Window(QtGui.QMainWindow):
         "Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
-        saupe_btn.clicked.connect(CN_Saupe_Window)
+        saupe_btn.clicked.connect(self.create_cn_saupe_win1)
         saupe_btn.resize(200, 20)
         saupe_btn.move(150, 50)
         
         diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
-        diag_btn.clicked.connect(CN_Diag_Window) #next window class
+        diag_btn.clicked.connect(self.create_cn_diag_win1) #next window class
         diag_btn.resize(300, 20)
         diag_btn.move(100, 100)
         
@@ -136,22 +136,29 @@ class CN_Matrix_Window(QtGui.QMainWindow):
         
 class CaHa_Matrix_Window(QtGui.QMainWindow):
     """Choose which matrix to use for Calpha-Halpha Couplings."""
+    
     def __init__(self):
         super(CaHa_Matrix_Window, self).__init__()
         self.setWindowTitle("Choose matrix to input:")
         self.setGeometry(50, 50, 500, 200)
         self.matrix_buttons()
         
+    def create_caha_saupe_win1(self):
+        self.cahasaupe = CaHa_Saupe_Window()
+       
+    def create_caha_diag_win1(self):
+        self.cahadiag = CaHa_Diag_Window()
+        
     def matrix_buttons(self):
         "Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
-        #saupe_btn.clicked.connect(self.create
+        saupe_btn.clicked.connect(self.create_caha_saupe_win1)
         saupe_btn.resize(200, 20)
         saupe_btn.move(150, 50)
         
         diag_btn = QtGui.QPushButton("Input diagonalized matrix and Euler angles", self)
-        #diag_btn.clicked.connect(CaHa_Diag_Window) #next window class
+        diag_btn.clicked.connect(self.create_caha_diag_win1) 
         diag_btn.resize(300, 20)
         diag_btn.move(100, 100)
         
@@ -318,7 +325,6 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
-        
         
     global diag_list
     diag_list = []
@@ -757,6 +763,186 @@ class CN_Diag_Window(QtGui.QWidget):
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
     
+class CaHa_Saupe_Window(QtGui.QWidget):
+    """Prompt the user to input the values of the Saupe matrix."""
+    def __init__(self):
+        super(CaHa_Saupe_Window, self).__init__()
+        self.make_saupewin1()
+        self.make_saupewin2()
+        self.make_saupewin3()
+        self.make_saupewin4()
+        self.make_saupewin5()
+        self.make_expRDC_file_win()
+        self.make_ccoords_file_win()
+        self.make_ncoords_file_win()
+        self.run_rdc_calc()
+#   
+    global saupe_list 
+    saupe_list = []    
+    global diag_list
+    diag_list = [] 
+    global params_list 
+    params_list = []
+    
+    def make_saupewin1(self):
+        sxx, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 1', 
+                                           'Enter sxx:', decimals = 10)        
+        if ok:
+            saupe_list.append(sxx)
+            
+    def make_saupewin2(self):
+        syy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 2', 
+                                           'Enter syy:', decimals = 10)
+        if ok:
+            saupe_list.append(syy)
+            
+    def make_saupewin3(self):
+        sxy, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 3', 
+                                           'Enter sxy:', decimals = 10)        
+        if ok:
+            saupe_list.append(sxy)
+    
+    def make_saupewin4(self):
+        sxz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 4', 
+                                           'Enter sxz:', decimals = 10)
+        if ok:
+            saupe_list.append(sxz)
+            
+    def make_saupewin5(self):
+        syz, ok = QtGui.QInputDialog.getDouble(self, 'Saupe Matrix Input 5', 
+                                           'Enter syz:', decimals = 10)
+        if ok:
+            saupe_list.append(syz)
+            params_list.append(saupe_list)
+        print saupe_list
+        
+        
+    def make_expRDC_file_win(self):
+        expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
+                                                    'Enter the name of the experimental RDC file.')
+        if ok:
+            print expRDCfile #to be changed later
+            params_list.append(expRDCfile)
+    
+    def make_cacoords_file_win(self):
+        cacoords_file, ok = QtGui.QInputDialog.getText(self, 'Calpha coordinates file', 
+                                                      'Enter the name of the file containing the Calpha coordinates.')
+        if ok:
+            print cacoords_file #to be changed later
+            params_list.append(cacoords_file)
+    
+    def make_hacoords_file_win(self):
+        hacoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
+                                                      'Enter the name of the file containing the Halpha coordinates.')
+        if ok:
+            print hacoords_file #to be changed later
+            params_list.append(hacoords_file)
+            params_list.append(-60400)
+    
+    def run_rdc_calc(self):
+        rdcrun = calc_rdc_caha_saupe.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4])
+        rdcrun.get_exp_rdcs()
+        rdcrun.get_coords()
+        rdcrun.back_calculate_rdcs()
+        qcalc = qfactor_gui.Qfactor()
+        qcalc.qfactor()
+            
+class CaHa_Diag_Window(QtGui.QWidget):
+    """Prompt the user to input the values of the Saupe matrix."""
+    def __init__(self):
+        super(CaHa_Diag_Window, self).__init__()
+        self.make_diagwin1()
+        self.make_diagwin2()
+        self.make_diagwin3()
+        self.make_eulerwin1()
+        self.make_eulerwin2()
+        self.make_eulerwin3()
+        self.make_expRDC_file_win()
+        self.make_cacoords_file_win()
+        self.make_hacoords_file_win()
+        self.run_rdc_calc()
+        
+        
+    global diag_list
+    diag_list = []
+    global euler_list
+    euler_list = []
+    global params_list
+    params_list = []
+    
+    def make_diagwin1(self):
+        Sxx, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 1',
+                                               'Enter Sxx:', decimals = 10)
+        if ok:
+            diag_list.append(Sxx)
+            
+    def make_diagwin2(self):
+        Syy, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 2',
+                                               'Enter Syy:', decimals = 10)
+        if ok:
+            diag_list.append(Syy)
+            
+    def make_diagwin3(self):
+        Szz, ok = QtGui.QInputDialog.getDouble(self, 'Diagonalized Matrix Input 3',
+                                               'Enter Szz:', decimals = 10)
+        if ok:
+            diag_list.append(Szz)
+        print diag_list
+        params_list.append(diag_list)        
+        
+    def make_eulerwin1(self):
+        alpha, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle alpha', 
+                                                 'Enter alpha (in degrees)', decimals = 2)
+        if ok:
+            euler_list.append(alpha)
+        
+    def make_eulerwin2(self):
+        beta, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle beta', 
+                                                 'Enter beta (in degrees)', decimals = 2)                                  
+        if ok:
+            euler_list.append(beta)
+                                        
+    def make_eulerwin3(self):
+        gamma, ok = QtGui.QInputDialog.getDouble(self, 'Euler Angle gamma', 
+                                                 'Enter gamma (in degrees)', decimals = 2)
+        if ok:
+            euler_list.append(gamma)
+        print euler_list
+        params_list.append(euler_list)
+    
+    def make_expRDC_file_win(self):
+        expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
+                                                    'Enter the name of the experimental RDC file.')
+        if ok:
+            print expRDCfile #to be changed later
+            params_list.append(expRDCfile)
+    
+    def make_ccoords_file_win(self):
+        ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
+                                                      'Enter the name of the file containing the C coordinates.')
+        if ok:
+            print ccoords_file #to be changed later
+            params_list.append(ccoords_file)
+    
+    def make_ncoords_file_win(self):
+        ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
+                                                      'Enter the name of the file containing the N coordinates.')
+        if ok:
+            print ncoords_file #to be changed later
+            params_list.append(ncoords_file)
+            
+            params_list.append(6125) 
+
+    def run_rdc_calc(self):
+        rdcrun = calc_rdc_caha_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
+        rdcrun.get_exp_rdcs()
+        rdcrun.get_coords()
+        rdcrun.do_matrix_operations()
+        rdcrun.back_calculate_rdcs()
+        qcalc = qfactor_gui.Qfactor()
+        qcalc.qfactor()
+    
+
 
 def main():
     app = QtGui.QApplication(sys.argv)

@@ -9,18 +9,22 @@ import numpy as np
 import scipy as sp
 from math import *
 import time, sys, os, math, copy, re
+
 import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
+import pandas as pd
+import seaborn as sns
 import calc_rdc_dmax1_diag
 import calc_rdc_dmax1_saupe
 import calc_rdc_dmax2_diag
 import calc_rdc_dmax2_saupe
 import calc_rdc_cn_diag
 import calc_rdc_cn_saupe
+import calc_rdc_caha_saupe
+import calc_rdc_caha_diag
 import qfactor_gui
-import pandas as pd
-import seaborn as sns
+import pandas_gui
 
 class IntroWindow(QtGui.QMainWindow):
     """Greet the user, ask the user to enter the application."""
@@ -240,6 +244,7 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
+        self.run_pandas()
 #   
     global saupe_list 
     saupe_list = []    
@@ -287,6 +292,8 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -310,6 +317,11 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
+    
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
             
 class Dmax1_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -325,6 +337,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
+        self.run_pandas()
         
     global diag_list
     diag_list = []
@@ -379,8 +392,8 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
-#            exp_rdcs = np.genfromtxt(expRDCfile)
-#            np.savetxt("exp_rdcs.csv", exp_rdcs)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -395,8 +408,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         if ok:
             print ncoords_file #to be changed later
             params_list.append(ncoords_file)
-            
-            params_list.append(21700) #make new function for this?
+            params_list.append(21700) 
 
     def run_rdc_calc(self):
         rdcrun = calc_rdc_dmax1_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
@@ -406,8 +418,12 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
-     
-       
+    
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
+            
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):
@@ -421,6 +437,7 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
+        self.run_pandas()
    
     global saupe_list 
     saupe_list = []   #you will need to redefine this for each version?  
@@ -465,6 +482,8 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -489,6 +508,11 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
         
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
+        
 class Dmax2_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):
@@ -503,7 +527,7 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         self.make_hcoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
-        
+        self.run_pandas()
         
     global diag_list
     diag_list = []
@@ -558,6 +582,8 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_hcoords_file_win(self):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
@@ -584,6 +610,11 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
         
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
+        
 class CN_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
     def __init__(self):
@@ -597,6 +628,7 @@ class CN_Saupe_Window(QtGui.QWidget):
         self.make_ccoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
+        self.run_pandas()
 #   
     global saupe_list 
     saupe_list = []    
@@ -644,6 +676,8 @@ class CN_Saupe_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_ccoords_file_win(self):
         ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
@@ -667,6 +701,11 @@ class CN_Saupe_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
+    
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
             
 class CN_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -682,7 +721,7 @@ class CN_Diag_Window(QtGui.QWidget):
         self.make_ccoords_file_win()
         self.make_ncoords_file_win()
         self.run_rdc_calc()
-        
+        self.run_pandas()
         
     global diag_list
     diag_list = []
@@ -737,6 +776,8 @@ class CN_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_ccoords_file_win(self):
         ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
@@ -762,6 +803,11 @@ class CN_Diag_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
+        
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
     
 class CaHa_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -773,8 +819,8 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         self.make_saupewin4()
         self.make_saupewin5()
         self.make_expRDC_file_win()
-        self.make_ccoords_file_win()
-        self.make_ncoords_file_win()
+        self.make_cacoords_file_win()
+        self.make_hacoords_file_win()
         self.run_rdc_calc()
 #   
     global saupe_list 
@@ -823,6 +869,8 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
     def make_cacoords_file_win(self):
         cacoords_file, ok = QtGui.QInputDialog.getText(self, 'Calpha coordinates file', 
@@ -846,6 +894,11 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
+        
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
             
 class CaHa_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -861,7 +914,7 @@ class CaHa_Diag_Window(QtGui.QWidget):
         self.make_cacoords_file_win()
         self.make_hacoords_file_win()
         self.run_rdc_calc()
-        
+        self.run_pandas()
         
     global diag_list
     diag_list = []
@@ -916,17 +969,19 @@ class CaHa_Diag_Window(QtGui.QWidget):
         if ok:
             print expRDCfile #to be changed later
             params_list.append(expRDCfile)
+            exp_rdcs = np.genfromtxt(expRDCfile)
+            np.savetxt("exp_rdcs.csv", exp_rdcs)
     
-    def make_ccoords_file_win(self):
-        ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
-                                                      'Enter the name of the file containing the C coordinates.')
+    def make_cacoords_file_win(self):
+        ccoords_file, ok = QtGui.QInputDialog.getText(self, 'Calpha coordinates file', 
+                                                      'Enter the name of the file containing the Calpha coordinates.')
         if ok:
             print ccoords_file #to be changed later
             params_list.append(ccoords_file)
     
-    def make_ncoords_file_win(self):
-        ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
-                                                      'Enter the name of the file containing the N coordinates.')
+    def make_hacoords_file_win(self):
+        ncoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
+                                                      'Enter the name of the file containing the Halpha coordinates.')
         if ok:
             print ncoords_file #to be changed later
             params_list.append(ncoords_file)
@@ -941,9 +996,12 @@ class CaHa_Diag_Window(QtGui.QWidget):
         rdcrun.back_calculate_rdcs()
         qcalc = qfactor_gui.Qfactor()
         qcalc.qfactor()
+        
+    def run_pandas(self):
+        pandasrun = pandas_gui.Pandas()
+        pandasrun.edit_csv()
+        pandasrun.manip_rdc_df()
     
-
-
 def main():
     app = QtGui.QApplication(sys.argv)
     RDC_GUI = IntroWindow()

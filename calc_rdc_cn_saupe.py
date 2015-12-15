@@ -15,12 +15,7 @@ This version for CN couplings, saupe matrix input.
 """
 
 import numpy as np
-from scipy import linalg
 from math import *
-import csv 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""

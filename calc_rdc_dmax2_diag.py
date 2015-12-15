@@ -4,23 +4,18 @@ Created on Tue Oct 27 09:37:57 2015
 
 @author: Chiara Del Piccolo
 """
-
 """
 Read in experimental Residual Dipolar Couplings
-(RDCs), and read in nitrogen (N) and hydrogen (H) coordinates to calculate the
-expected RDCs from a PDB file. Here, the example used is the substrate-free form
+(RDCs), and read in nitrogen (N) and Hydrogen (H) coordinates to calculate the
+expected RDCs from a text file. Here, the example used is the substrate-free form
 of arginine kinase, in phage alignment media. 
 Adapated from Class 4 assignment. 12.12.15 committed
-For NH coupling, dmax2 (dmax=24850), diagonalized matrix/euler angle input. 
+This version for NH couplings, dmax1 = 24850, 
+diagonalized matrix / euler angles input. 
 """
 
 import numpy as np
-from scipy import linalg
 from math import *
-import csv 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
@@ -40,8 +35,8 @@ class ResidualDipolarCouplings(object):
     def get_coords(self):
         """Read in the coordinates of the nitrogen (N) and hydrogen (H) residues
            from a text file."""
-        Hcoords = np.genfromtxt(self.hfile) #change to user input from GUI
-        Ncoords = np.genfromtxt(self.nfile) #change to user input from GUI
+        Hcoords = np.genfromtxt(self.hfile) 
+        Ncoords = np.genfromtxt(self.nfile) 
        
         #slicing
         H_residues = Hcoords[:,0] 
@@ -123,19 +118,10 @@ class ResidualDipolarCouplings(object):
         rdcs = np.array(rdc_list)
         np.savetxt("calc_rdcs.csv", rdcs)
         return rdcs
-        #print("Number of calculated RDCs: ", rdcs.size)   #remove later
-        #print("First five calculated RDCs: ", rdcs[0:5])  #remove later
  
-        
-
 if __name__ == "__main__":
-    #change for new input order and hfile/nfile input    
-    #x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
     x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 24850)
     x.get_exp_rdcs()
     x.get_coords()
     x.do_matrix_operations()
     x.back_calculate_rdcs()
-    #x.plot_exp_rdcs
-    
-#import into main file and run??

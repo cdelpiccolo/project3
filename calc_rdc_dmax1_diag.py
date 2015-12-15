@@ -7,19 +7,16 @@ Created on Tue Oct 27 09:37:57 2015
 
 """
 Read in experimental Residual Dipolar Couplings
-(RDCs), and read in nitrogen (N) and hydrogen (H) coordinates to calculate the
-expected RDCs from a PDB file. Here, the example used is the substrate-free form
+(RDCs), and read in nitrogen (N) and Hydrogen (H) coordinates to calculate the
+expected RDCs from a text file. Here, the example used is the substrate-free form
 of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.9.15 committed 
+Adapated from Class 4 assignment. 12.9.15 committed
+This version for NH couplings, dmax1 = 21700, 
+diagonalized matrix / euler angles input.
 """
 
 import numpy as np
-from scipy import linalg
 from math import *
-import time, sys, os, math, copy, re
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
@@ -35,21 +32,12 @@ class ResidualDipolarCouplings(object):
         """Read in experimentally observed RDCs from a text file."""
         exp_rdc = np.genfromtxt(self.exp_rdc_file)
         return exp_rdc
-    
-#    def plot_exp_rdcs(self):
-#        """Plot experimentally observed RDCs. 
-#           Expected values are between -20 and 20. Outside this range are outliers."""
-#        exp_rdc = self.get_exp_rdcs()
-#        plt.plot(exp_rdc [:252,1])
-#        plt.title("Experimental RDCs for apo AK in phage media")
-#        plt.xlabel("Residue number")
-#        plt.ylabel("Experimental RDC")
 
     def get_coords(self):
         """Read in the coordinates of the nitrogen (N) and hydrogen (H) residues
            from a text file."""
-        Hcoords = np.genfromtxt(self.hfile) #change to user input from GUI
-        Ncoords = np.genfromtxt(self.nfile) #change to user input from GUI
+        Hcoords = np.genfromtxt(self.hfile) 
+        Ncoords = np.genfromtxt(self.nfile) 
        
         #slicing
         H_residues = Hcoords[:,0] 
@@ -80,7 +68,7 @@ class ResidualDipolarCouplings(object):
         beta_deg = euler_angles[1]
         gamma_deg = euler_angles[2]
         
-        #convert to degrees -- RADIANS??
+        #convert to radians
         alpha = alpha_deg*(pi/180)
         beta = beta_deg*(pi/180)
         gamma = gamma_deg*(pi/180)
@@ -128,40 +116,14 @@ class ResidualDipolarCouplings(object):
             
             rdc = (sxx*sc1) + (syy*sc2) + (sxy*sc3) + (sxz*sc4) + (syz*sc5)
             rdc_list.append(rdc)
-            rdcs = np.array(rdc_list)
-            np.savetxt("calc_rdcs.csv", rdcs)
-            return rdcs
-        #print("Number of calculated RDCs: ", rdcs.size)   #remove later
-        #print("First five calculated RDCs: ", rdcs[0:5])  #remove later
+        rdcs = np.array(rdc_list)
+        np.savetxt("calc_rdcs.csv", rdcs)
+        return rdcs
         
-    def qfactor(self):
-        exp_rdcs = self.get_exp_rdcs()
-        calc_rdcs = self.back_calculate_rdcs()
-        rdczip = zip(exp_rdcs, calc_rdcs)
-        diff_list = []
-        for t in rdczip:
-            diff = t[0] - t[1]
-            diff_list.append(diff)
-        sqdiff = np.square(diff_list)
-        numerator = sum(sqdiff)
-        sqobs = np.square(exp_rdcs)
-        denominator = sum(sqobs)
-        Q = sqrt(numerator / denominator)
-        Q = np.around(Q, 6)
-        print 'Q:', Q
-        return Q  
-
-
-        
-
-if __name__ == "__main__":
-    #change for new input order and hfile/nfile input    
-    #x = ResidualDipolarCouplings(Smatrix=[-0.000240977,-0.000429318,0.000670295], euler_angles=[36.9364,139.182,-118.931], dmax = 21700, exp_rdc_file = "apo_phage.txt")
+if __name__ == "__main__":   
     x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 21700)
     x.get_exp_rdcs()
     x.get_coords()
     x.do_matrix_operations()
     x.back_calculate_rdcs()
-    #x.plot_exp_rdcs
-    
-#import into main file and run??
+

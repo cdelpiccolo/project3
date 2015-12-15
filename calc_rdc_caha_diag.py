@@ -15,12 +15,7 @@ This version for CaHa couplings, diagonalized matrix / euler angles input.
 """
 
 import numpy as np
-from scipy import linalg
 from math import *
-import csv 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
@@ -40,8 +35,8 @@ class ResidualDipolarCouplings(object):
     def get_coords(self):
         """Read in the coordinates of the alpha-carbon (CA) and alpha-hydrogen (HA) residues
            from a text file."""
-        CAcoords = np.genfromtxt(self.cafile) #change to user input from GUI
-        HAcoords = np.genfromtxt(self.hafile) #change to user input from GUI
+        CAcoords = np.genfromtxt(self.cafile) 
+        HAcoords = np.genfromtxt(self.hafile) 
        
         #slicing
         CA_residues = CAcoords[:,0] 
@@ -72,7 +67,7 @@ class ResidualDipolarCouplings(object):
         beta_deg = euler_angles[1]
         gamma_deg = euler_angles[2]
         
-        #convert to degrees -- RADIANS??
+        #convert to radians
         alpha = alpha_deg*(pi/180)
         beta = beta_deg*(pi/180)
         gamma = gamma_deg*(pi/180)

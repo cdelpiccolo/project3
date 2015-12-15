@@ -4,17 +4,20 @@ Created on Fri Nov 27 21:59:53 2015
 
 @author: Chiara Del Piccolo
 """
+"""
+CS 506 Final Project.
+This program implements a simple GUI interface that accepts user inputs and 
+uses them to calculate the expected RDCs and the Qfactor. 
+The program will then construct plots to compare individual experimental 
+and calculated RDCS  in order to identify possible points of protein dynamics.
+"""
 
 import numpy as np
 import scipy as sp
 from math import *
-import time, sys, os, math, copy, re
-
 import sys
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QPushButton
-import pandas as pd
-import seaborn as sns
 import calc_rdc_dmax1_diag
 import calc_rdc_dmax1_saupe
 import calc_rdc_dmax2_diag
@@ -26,8 +29,8 @@ import calc_rdc_caha_diag
 import qfactor_gui
 import pandas_gui
 
-log = open("rdc_proj.log", "a")
-sys.stdout = log
+#log = open('rdc_proj.log', 'a')
+#sys.stdout = log
 
 class IntroWindow(QtGui.QMainWindow):
     """Greet the user, ask the user to enter the application."""
@@ -38,6 +41,7 @@ class IntroWindow(QtGui.QMainWindow):
         self.entry_button()
         
     def create_win(self):
+        """Create window to ask the user which type of coupling to input."""
         self.win = CouplingWindow()
      
     def entry_button(self):
@@ -53,16 +57,19 @@ class CouplingWindow(QtGui.QMainWindow):
     def __init__(self):
         super(CouplingWindow, self).__init__()
         self.setWindowTitle("Choose coupling type:")
-        self.setGeometry(50, 50, 500, 200) #width, height
+        self.setGeometry(50, 50, 500, 200) 
         self.coupling_buttons()
         
     def create_nh_win(self):
+        """Create a window for NH couplings."""
         self.nhwin = NH_Dmax_Window()
     
     def create_cn_win(self):
+        """Create a window for CN couplings."""
         self.cnwin = CN_Matrix_Window()  
         
     def create_caha_win(self):
+        """Create a window for Calpha-Halpha couplings."""
         self.cahawin = CaHa_Matrix_Window() 
         
     def coupling_buttons(self):
@@ -93,9 +100,11 @@ class NH_Dmax_Window(QtGui.QMainWindow):
         self.dmax_buttons()
         
     def create_dmax1_win(self):
+        """Create a window for Dmax = 21700."""
         self.dmax1win = Dmax1_Window() 
         
     def create_dmax2_win(self):
+        """Create a window for Dmax = 24850."""
         self.dmax2win = Dmax2_Window()
         
     def dmax_buttons(self):
@@ -121,13 +130,16 @@ class CN_Matrix_Window(QtGui.QMainWindow):
         self.matrix_buttons()
     
     def create_cn_saupe_win1(self):
+        """Create a window for saupe matrix input for CN couplings."""
         self.cnsaupe = CN_Saupe_Window()
        
     def create_cn_diag_win1(self):
+        """Create a window for diagonalized matrix and Euler angles inputs for\
+        CN couplings."""
         self.cndiag = CN_Diag_Window()
         
     def matrix_buttons(self):
-        "Prompt the user to choose whether to input the saupe matrix or the \
+        """Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
         saupe_btn.clicked.connect(self.create_cn_saupe_win1)
@@ -151,13 +163,16 @@ class CaHa_Matrix_Window(QtGui.QMainWindow):
         self.matrix_buttons()
         
     def create_caha_saupe_win1(self):
+        """Create a window for saupe matrix input for Calpha-Halpha couplings."""
         self.cahasaupe = CaHa_Saupe_Window()
        
     def create_caha_diag_win1(self):
+        """Create a window for diagonalized matrix and Euler angles input for\
+        Calpha-Halpha couplings."""
         self.cahadiag = CaHa_Diag_Window()
         
     def matrix_buttons(self):
-        "Prompt the user to choose whether to input the saupe matrix or the \
+        """Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
         saupe_btn.clicked.connect(self.create_caha_saupe_win1)
@@ -175,6 +190,7 @@ class Dmax1_Window(QtGui.QMainWindow):
     """After the user chooses Dmax=21700 for the scaling factor, \
     prompt the user to choose whether to input the saupe matrix \
     or the diagonalized matrix and Euler angles."""
+    
     def __init__(self):
         super(Dmax1_Window, self).__init__()
         self.setWindowTitle("Choose matrix to input:")
@@ -182,13 +198,17 @@ class Dmax1_Window(QtGui.QMainWindow):
         self.matrix_buttons()
         
     def create_dmax1_saupe_win1(self):
+        """Create a window for saupe matrix input for NH couplings, where\
+        Dmax = 21700."""
         self.dmax1saupe = Dmax1_Saupe_Window()
        
     def create_dmax1_diag_win1(self):
+        """Create a window for diagonalized matrix and Euler angles input for\
+        NH couplings, where Dmax = 21700."""
         self.dmax1diag = Dmax1_Diag_Window()
                 
     def matrix_buttons(self):
-        "Prompt the user to choose whether to input the saupe matrix or the \
+        """Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
         saupe_btn.clicked.connect(self.create_dmax1_saupe_win1)
@@ -214,13 +234,16 @@ class Dmax2_Window(QtGui.QMainWindow):
         self.matrix_buttons()
     
     def create_dmax2_saupe_win1(self):
+        """Create a window for saupe matrix input for NH couplings, where Dmax = 21700."""
         self.dmax2saupe = Dmax2_Saupe_Window()
     
     def create_dmax2_diag_win1(self):
+        """Create a window for diagonalized matrix and Euler angles input for\
+        NH couplings, where Dmax = 21700."""
         self.dmax2diag = Dmax2_Diag_Window()
         
     def matrix_buttons(self):
-        "Prompt the user to choose whether to input the saupe matrix or the \
+        """Prompt the user to choose whether to input the saupe matrix or the \
         diagonalized matrix and Euler angles."""    
         saupe_btn = QtGui.QPushButton("Input saupe matrix", self)
         saupe_btn.clicked.connect(self.create_dmax2_saupe_win1)
@@ -315,6 +338,7 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
             print 'Dmax = 21700'
     
     def run_rdc_calc(self):
+        """Back-calculate the RDCs and calculate the Qfactor."""
         rdcrun = calc_rdc_dmax1_saupe.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4])
         rdcrun.get_exp_rdcs()
         rdcrun.get_coords()
@@ -323,6 +347,8 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         qcalc.qfactor()
     
     def run_pandas(self):
+        """Show the plots that compare the experimental and back-calculated\
+        RDCs, and identify possible points of dynamics."""
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
@@ -416,6 +442,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
             print 'Dmax = 21700'
 
     def run_rdc_calc(self):
+        """Back-calculate the RDCs and calculate the Qfactor."""
         rdcrun = calc_rdc_dmax1_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
         rdcrun.get_exp_rdcs()
         rdcrun.get_coords()
@@ -984,14 +1011,14 @@ class CaHa_Diag_Window(QtGui.QWidget):
                                                       'Enter the name of the file containing the Calpha coordinates.')
         if ok:
             print 'Alpha carbon coordinates file:', cacoords_file 
-            params_list.append(ccoords_file)
+            params_list.append(cacoords_file)
     
     def make_hacoords_file_win(self):
         hacoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
                                                       'Enter the name of the file containing the Halpha coordinates.')
         if ok:
             print 'Alpha hydrogen coordinates file:', hacoords_file 
-            params_list.append(ncoords_file)
+            params_list.append(hacoords_file)
             params_list.append(6125)
             print 'Dmax = 6125'
 

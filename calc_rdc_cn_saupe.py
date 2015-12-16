@@ -8,9 +8,7 @@ Created on Tue Oct 27 09:37:57 2015
 """
 Read in experimental Residual Dipolar Couplings
 (RDCs), and read in carbon (C) and nitrogen (N) coordinates to calculate the
-expected RDCs from a text file. Here, the example used is the substrate-free form
-of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.12.15 committed
+expected RDCs from a text file.
 This version for CN couplings, saupe matrix input. 
 """
 

@@ -8,6 +8,8 @@ Created on Fri Nov 27 21:59:53 2015
 CS 506 Final Project.
 This program implements a simple GUI interface that accepts user inputs and 
 uses them to calculate the expected RDCs and the Qfactor. 
+The user inputs and the results of the calculations will be output to a 
+log file called "final_log_TIME_DATE". 
 The program will then construct plots to compare individual experimental 
 and calculated RDCS  in order to identify possible points of protein dynamics.
 """
@@ -28,10 +30,13 @@ import calc_rdc_caha_saupe
 import calc_rdc_caha_diag
 import qfactor_gui
 import pandas_gui
-
+import os
 import logging
-logging.basicConfig(filename='logtry1215.log', level=logging.INFO)
+import datetime as dt
 
+log_filename = dt.datetime.now().strftime('log_%H_%M_%d_%m_%Y.txt')
+log_filename_final = dt.datetime.now().strftime('final_log_%H_%M_%d_%m_%Y.txt')
+logging.basicConfig(filename=log_filename, level=logging.INFO)
 
 class IntroWindow(QtGui.QMainWindow):
     """Greet the user, ask the user to enter the application."""
@@ -353,6 +358,7 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
             
 class Dmax1_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -456,6 +462,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
             
 class Dmax2_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -545,6 +552,7 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
         
 class Dmax2_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -648,6 +656,7 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
         
 class CN_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -741,6 +750,7 @@ class CN_Saupe_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
             
 class CN_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -843,6 +853,7 @@ class CN_Diag_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
     
 class CaHa_Saupe_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -934,6 +945,7 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
+        pandasrun.edit_logfile()
             
 class CaHa_Diag_Window(QtGui.QWidget):
     """Prompt the user to input the values of the Saupe matrix."""
@@ -1017,9 +1029,6 @@ class CaHa_Diag_Window(QtGui.QWidget):
     def make_hacoords_file_win(self):
         hacoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
                                                      'Enter the name of the file containing the Halpha coordinates.')
-#        old_stdout = sys.stdout
-#        log_file = open('tryagain.log', 'w')
-#        sys.stdout = log_file
         
         if ok:
             logging.info('%s %s' % ('Alpha hydrogen coordinates file:', hacoords_file))
@@ -1040,18 +1049,12 @@ class CaHa_Diag_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
-
-#import fileinput 
-#with fileinput.FileInput('logtry1215.log', inplace=True) as file:
-#    for line in file:
-#        print(line.replace('INFO:root:', '', end=''))
-
+        pandasrun.edit_logfile()
  
 def main():
     app = QtGui.QApplication(sys.argv)
     RDC_GUI = IntroWindow()
-    sys.exit(app.exec_())
-        
+    sys.exit(app.exec_()) 
     
 main()
    

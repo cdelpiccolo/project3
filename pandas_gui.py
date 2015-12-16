@@ -7,7 +7,7 @@ Created on Thu Dec 10 20:30:00 2015
 """
 Construct plots that compare the experimental and back-calculated RDCs so that
 possible points of dynamics can be identified.
-Also, print basic statistics and possible outliers.
+Also, print basic statistics and possible outliers to the log file.
 """
 
 import math
@@ -15,6 +15,11 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import logging
+import datetime as dt
+import os
+
+log_filename = dt.datetime.now().strftime('log_%H_%M_%d_%m_%Y.txt')
+log_filename_final = dt.datetime.now().strftime('final_log_%H_%M_%d_%m_%Y.txt')
 
 class Pandas(object):
     """Calculate the Qfactor for the experimental and back-calculated RDCs."""   
@@ -65,15 +70,30 @@ class Pandas(object):
         """Manipulate the rdc dataframe using methods in pandas."""
         rdc_df = self.make_rdc_df()
         basic_stats = rdc_df.describe()
-        print basic_stats
+        logging.info('%s' % basic_stats)
         filter_outliers = rdc_df[abs(rdc_df['Experimental RDC']) > 20]  #possible outliers     
         filter_outliers = pd.DataFrame.dropna(filter_outliers, subset=['Experimental RDC', 'Back-Calculated RDC'])
-        print "Possible outliers: ", filter_outliers
+        logging.info('%s %s' % ("Possible outliers: ", filter_outliers))
         
         exp_rdc_plot = sns.jointplot(x="Residue Number", y="Experimental RDC", data=rdc_df)
         print exp_rdc_plot
         pairplot = sns.pairplot(rdc_df, vars=['Experimental RDC', 'Back-Calculated RDC'])
         print pairplot
+        
+    def edit_logfile(self):
+        """Edit the logfile for clarity."""
+        infile = log_filename
+        outfile = log_filename_final
+        remove = ['INFO:root:']
+        fin = open(infile)
+        fout = open(outfile, 'w+')
+        for line in fin:
+            for string in remove:
+                line = line.replace(string, "")
+            fout.write(line)
+        fin.close()
+        fout.close()
+        os.remove(fin)
    
 if __name__ == "__main__":
     x = Pandas()

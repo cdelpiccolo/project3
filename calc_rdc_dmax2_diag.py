@@ -7,9 +7,7 @@ Created on Tue Oct 27 09:37:57 2015
 """
 Read in experimental Residual Dipolar Couplings
 (RDCs), and read in nitrogen (N) and Hydrogen (H) coordinates to calculate the
-expected RDCs from a text file. Here, the example used is the substrate-free form
-of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.12.15 committed
+expected RDCs from a text file. 
 This version for NH couplings, dmax1 = 24850, 
 diagonalized matrix / euler angles input. 
 """
@@ -120,7 +118,7 @@ class ResidualDipolarCouplings(object):
         return rdcs
  
 if __name__ == "__main__":
-    x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 24850)
+    x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.csv', u'h.txt', u'n.txt', 24850)
     x.get_exp_rdcs()
     x.get_coords()
     x.do_matrix_operations()

@@ -8,9 +8,7 @@ Created on Tue Oct 27 09:37:57 2015
 """
 Read in experimental Residual Dipolar Couplings
 (RDCs), and read in alpha-carbon (Calpha) and alpha-hydrogen (Halpha) coordinates to calculate the
-expected RDCs from a text file. Here, the example used is the substrate-free form
-of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.13.15 committed
+expected RDCs from a text file. 
 This version for CaHa couplings, diagonalized matrix / euler angles input.
 """
 
@@ -57,8 +55,7 @@ class ResidualDipolarCouplings(object):
 
     def do_matrix_operations(self):
         """Construct and rotate the matrices that are needed to calculate
-           the expected RDCs."""
-           
+           the expected RDCs."""   
         S_matrix = self.Smatrix
         euler_angles = self.euler_angles
         diag_Smatrix = np.diag(S_matrix)

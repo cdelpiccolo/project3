@@ -29,8 +29,8 @@ import calc_rdc_caha_diag
 import qfactor_gui
 import pandas_gui
 
-#log = open('rdc_proj.log', 'a')
-#sys.stdout = log
+import logging
+logging.basicConfig(filename='logtry1215.log', level=logging.INFO)
 
 class IntroWindow(QtGui.QMainWindow):
     """Greet the user, ask the user to enter the application."""
@@ -258,7 +258,8 @@ class Dmax2_Window(QtGui.QMainWindow):
         self.show()
         
 class Dmax1_Saupe_Window(QtGui.QWidget):
-    """Prompt the user to input the values of the Saupe matrix."""
+    """Prompt the user to input the values of the Saupe matrix."""    
+    
     def __init__(self):
         super(Dmax1_Saupe_Window, self).__init__()
         self.make_saupewin1()
@@ -271,7 +272,7 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         self.make_ncoords_file_win()
         self.run_rdc_calc()
         self.run_pandas()
-#   
+  
     global saupe_list 
     saupe_list = []    
     global diag_list
@@ -309,14 +310,15 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         if ok:
             saupe_list.append(syz)
             params_list.append(saupe_list)
-        print 'Saupe Matrix:', saupe_list
-        
+        logging.info('Saupe Matrix:')
+        logging.info('%s' % saupe_list)
         
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile 
+            logging.info('Experimental RDC file:')
+            logging.info(expRDCfile)
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -325,17 +327,19 @@ class Dmax1_Saupe_Window(QtGui.QWidget):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
-            print 'Hydrogen coordinates file:', hcoords_file
+            logging.info('Hydrogen coordinates file:')
+            logging.info(hcoords_file)
             params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates file:', ncoords_file 
+            logging.info('Nitrogen coordinates file:')
+            logging.info(ncoords_file)
             params_list.append(ncoords_file)
             params_list.append(21700)
-            print 'Dmax = 21700'
+            logging.info('Dmax = 21700')
     
     def run_rdc_calc(self):
         """Back-calculate the RDCs and calculate the Qfactor."""
@@ -393,7 +397,7 @@ class Dmax1_Diag_Window(QtGui.QWidget):
                                                'Enter Szz:', decimals = 10)
         if ok:
             diag_list.append(Szz)
-        print 'Diagonalized matrix:', diag_list
+        logging.info('Diagonalized matrix:', diag_list)
         params_list.append(diag_list)        
         
     def make_eulerwin1(self):
@@ -413,14 +417,14 @@ class Dmax1_Diag_Window(QtGui.QWidget):
                                                  'Enter gamma (in degrees)', decimals = 2)
         if ok:
             euler_list.append(gamma)
-        print 'Euler angles:', euler_list
+        logging.info('Euler angles:', euler_list)
         params_list.append(euler_list)
     
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile 
+            logging.info('Experimental RDC file:', expRDCfile) 
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -429,17 +433,17 @@ class Dmax1_Diag_Window(QtGui.QWidget):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
-            print 'Hydrogen coordinates file:', hcoords_file
+            logging.info('Hydrogen coordinates file:', hcoords_file)
             params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates file:', ncoords_file 
+            logging.info('Nitrogen coordinates file:', ncoords_file) 
             params_list.append(ncoords_file)
             params_list.append(21700) 
-            print 'Dmax = 21700'
+            logging.info('Dmax = 21700')
 
     def run_rdc_calc(self):
         """Back-calculate the RDCs and calculate the Qfactor."""
@@ -506,13 +510,13 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         if ok:
             saupe_list.append(syz)
             params_list.append(saupe_list)
-        print 'Saupe Matrix:', saupe_list  
+        logging.info('Saupe Matrix:', saupe_list)  
         
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile
+            logging.info('Experimental RDC file:', expRDCfile)
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -521,14 +525,14 @@ class Dmax2_Saupe_Window(QtGui.QWidget):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
-            print 'Hydrogen coordinates file:', hcoords_file
+            logging.info('Hydrogen coordinates file:', hcoords_file)
             params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates file:', ncoords_file 
+            logging.info('Nitrogen coordinates file:', ncoords_file) 
             params_list.append(ncoords_file)
             params_list.append(24850)
     
@@ -585,7 +589,7 @@ class Dmax2_Diag_Window(QtGui.QWidget):
                                                'Enter Szz:', decimals = 10)
         if ok:
             diag_list.append(Szz)
-        print 'Diagonalized matrix:', diag_list
+        logging.info('Diagonalized matrix:', diag_list)
         params_list.append(diag_list)        
         
     def make_eulerwin1(self):
@@ -605,14 +609,14 @@ class Dmax2_Diag_Window(QtGui.QWidget):
                                                  'Enter gamma (in degrees)', decimals = 2)
         if ok:
             euler_list.append(gamma)
-        print 'Euler angles:', euler_list
+        logging.info('Euler angles:', euler_list)
         params_list.append(euler_list)
     
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile 
+            logging.info('Experimental RDC file:', expRDCfile) 
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -621,18 +625,18 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
-            print 'Hydrogen coordinates:', hcoords_file 
+            logging.info('Hydrogen coordinates:', hcoords_file) 
             params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates:', ncoords_file
+            logging.info('Nitrogen coordinates:', ncoords_file)
             params_list.append(ncoords_file)
             
             params_list.append(24850) 
-            print 'Dmax = 24850'
+            logging.info('Dmax = 24850')
 
     def run_rdc_calc(self):
         rdcrun = calc_rdc_dmax2_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
@@ -700,14 +704,14 @@ class CN_Saupe_Window(QtGui.QWidget):
         if ok:
             saupe_list.append(syz)
             params_list.append(saupe_list)
-        print saupe_list
+        logging.info(saupe_list)
         
         
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile
+            logging.info('Experimental RDC file:', expRDCfile)
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -716,17 +720,17 @@ class CN_Saupe_Window(QtGui.QWidget):
         ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
                                                       'Enter the name of the file containing the C coordinates.')
         if ok:
-            print 'Carbon coordinates file:', ccoords_file 
+            logging.info('Carbon coordinates file:', ccoords_file) 
             params_list.append(ccoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates file:', ncoords_file 
+            logging.info('Nitrogen coordinates file:', ncoords_file) 
             params_list.append(ncoords_file)
             params_list.append(6125)
-            print 'Dmax = 6125'
+            logging.info('Dmax = 6125')
     
     def run_rdc_calc(self):
         rdcrun = calc_rdc_cn_saupe.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4])
@@ -781,7 +785,7 @@ class CN_Diag_Window(QtGui.QWidget):
                                                'Enter Szz:', decimals = 10)
         if ok:
             diag_list.append(Szz)
-        print 'Diagonalized matrix:', diag_list
+        logging.info('Diagonalized matrix:', diag_list)
         params_list.append(diag_list)        
         
     def make_eulerwin1(self):
@@ -801,14 +805,14 @@ class CN_Diag_Window(QtGui.QWidget):
                                                  'Enter gamma (in degrees)', decimals = 2)
         if ok:
             euler_list.append(gamma)
-        print 'Euler angles:', euler_list
+        logging.info('Euler angles:', euler_list)
         params_list.append(euler_list)
     
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile
+            logging.info('Experimental RDC file:', expRDCfile)
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -817,17 +821,17 @@ class CN_Diag_Window(QtGui.QWidget):
         ccoords_file, ok = QtGui.QInputDialog.getText(self, 'C coordinates file', 
                                                       'Enter the name of the file containing the C coordinates.')
         if ok:
-            print 'Carbon coordinates file:', ccoords_file
+            logging.info('Carbon coordinates file:', ccoords_file)
             params_list.append(ccoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            print 'Nitrogen coordinates file:', ncoords_file 
+            logging.info('Nitrogen coordinates file:', ncoords_file) 
             params_list.append(ncoords_file)
             params_list.append(6125) 
-            print 'Dmax = 6125'
+            logging.info('Dmax = 6125')
 
     def run_rdc_calc(self):
         rdcrun = calc_rdc_cn_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
@@ -894,13 +898,13 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         if ok:
             saupe_list.append(syz)
             params_list.append(saupe_list)
-        print 'Saupe matrix:', saupe_list        
+        logging.info('Saupe matrix:', saupe_list)        
         
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile 
+            logging.info('Experimental RDC file:', expRDCfile) 
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -909,17 +913,17 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         cacoords_file, ok = QtGui.QInputDialog.getText(self, 'Calpha coordinates file', 
                                                       'Enter the name of the file containing the Calpha coordinates.')
         if ok:
-            print 'Alpha carbon coordinates file:', cacoords_file 
+            logging.info('Alpha carbon coordinates file:', cacoords_file) 
             params_list.append(cacoords_file)
     
     def make_hacoords_file_win(self):
         hacoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
                                                       'Enter the name of the file containing the Halpha coordinates.')
         if ok:
-            print 'Alpha hydrogen coordinates file:', hacoords_file 
+            logging.info('Alpha hydrogen coordinates file:', hacoords_file) 
             params_list.append(hacoords_file)
             params_list.append(-60400)
-            print 'Dmax = -60400'
+            logging.info('Dmax = -60400')
     
     def run_rdc_calc(self):
         rdcrun = calc_rdc_caha_saupe.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4])
@@ -974,7 +978,7 @@ class CaHa_Diag_Window(QtGui.QWidget):
                                                'Enter Szz:', decimals = 10)
         if ok:
             diag_list.append(Szz)
-        print 'Diagonalized matrix:', diag_list
+        logging.info('Diagonalized matrix:', diag_list)
         params_list.append(diag_list)        
         
     def make_eulerwin1(self):
@@ -994,14 +998,14 @@ class CaHa_Diag_Window(QtGui.QWidget):
                                                  'Enter gamma (in degrees)', decimals = 2)
         if ok:
             euler_list.append(gamma)
-        print 'Euler angles:', euler_list
+        logging.info('Euler angles:', euler_list)
         params_list.append(euler_list)
     
     def make_expRDC_file_win(self):
         expRDCfile, ok = QtGui.QInputDialog.getText(self, 'Experimental RDC file',
                                                     'Enter the name of the experimental RDC file.')
         if ok:
-            print 'Experimental RDC file:', expRDCfile 
+            logging.info('Experimental RDC file:', expRDCfile) 
             params_list.append(expRDCfile)
             exp_rdcs = np.genfromtxt(expRDCfile)
             np.savetxt("exp_rdcs.csv", exp_rdcs)
@@ -1010,17 +1014,23 @@ class CaHa_Diag_Window(QtGui.QWidget):
         cacoords_file, ok = QtGui.QInputDialog.getText(self, 'Calpha coordinates file', 
                                                       'Enter the name of the file containing the Calpha coordinates.')
         if ok:
-            print 'Alpha carbon coordinates file:', cacoords_file 
+            logging.info('Alpha carbon coordinates file:', cacoords_file) 
             params_list.append(cacoords_file)
     
     def make_hacoords_file_win(self):
         hacoords_file, ok = QtGui.QInputDialog.getText(self, 'Halpha coordinates file', 
-                                                      'Enter the name of the file containing the Halpha coordinates.')
+                                                     'Enter the name of the file containing the Halpha coordinates.')
+#        old_stdout = sys.stdout
+#        log_file = open('tryagain.log', 'w')
+#        sys.stdout = log_file
+        
         if ok:
-            print 'Alpha hydrogen coordinates file:', hacoords_file 
+            logging.info('Alpha hydrogen coordinates file:', hacoords_file)
             params_list.append(hacoords_file)
             params_list.append(6125)
-            print 'Dmax = 6125'
+            #logging.warning('Dmax = 6125')
+#        sys.stdout = old_stdout
+#        log_file.close()
 
     def run_rdc_calc(self):
         rdcrun = calc_rdc_caha_diag.ResidualDipolarCouplings(params_list[0], params_list[1], params_list[2], params_list[3], params_list[4], params_list[5])
@@ -1035,11 +1045,18 @@ class CaHa_Diag_Window(QtGui.QWidget):
         pandasrun = pandas_gui.Pandas()
         pandasrun.edit_csv()
         pandasrun.manip_rdc_df()
-    
+
+#import fileinput 
+#with fileinput.FileInput('logtry1215.log', inplace=True) as file:
+#    for line in file:
+#        print(line.replace('INFO:root:', '', end=''))
+
+ 
 def main():
     app = QtGui.QApplication(sys.argv)
     RDC_GUI = IntroWindow()
     sys.exit(app.exec_())
+        
     
 main()
    

@@ -8,9 +8,7 @@ Created on Tue Oct 27 09:37:57 2015
 """
 Read in experimental Residual Dipolar Couplings
 (RDCs), and read in alpha-carbon (Ca) and alpha-hydrogen (Ha) coordinates to calculate the
-expected RDCs from a text file. Here, the example used is the substrate-free form
-of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.13.15 committed
+expected RDCs from a text file. 
 This version for Calpha-Halpha couplings, saupe matrix input. 
 """
 
@@ -85,7 +83,7 @@ class ResidualDipolarCouplings(object):
         return rdcs
  
 if __name__ == "__main__":        
-    x = ResidualDipolarCouplings([-2.95379276065e-06, -0.000216342464017, 0.000151739172395, -0.000386038080569, -0.000355440050948], u'apo_phage.txt', u'h.txt', u'n.txt', -60400)
+    x = ResidualDipolarCouplings([-2.95379276065e-06, -0.000216342464017, 0.000151739172395, -0.000386038080569, -0.000355440050948], u'apo_phage.csv', u'h.txt', u'n.txt', -60400)
     x.get_exp_rdcs()
     x.get_coords()
     x.make_saupe_matrix()

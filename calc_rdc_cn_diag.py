@@ -8,23 +8,16 @@ Created on Tue Oct 27 09:37:57 2015
 """
 Read in experimental Residual Dipolar Couplings
 (RDCs), and read in carbon (C) and nitrogen (N) coordinates to calculate the
-expected RDCs from a text file. Here, the example used is the substrate-free form
-of arginine kinase, in phage alignment media. 
-Adapated from Class 4 assignment. 12.12.15 committed
+expected RDCs from a text file.
 This version for CN couplings, diagonalized matrix / euler angles input.
 """
 
 import numpy as np
-from scipy import linalg
 from math import *
-import csv 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 class ResidualDipolarCouplings(object):
     """Read in experimental RDCs and calculate expected RDCs from coordinates."""
-    def __init__(self, Smatrix, euler_angles, exp_rdc_file, hfile, nfile, dmax):
+    def __init__(self, Smatrix, euler_angles, exp_rdc_file, cfile, nfile, dmax):
         self.Smatrix = Smatrix
         self.euler_angles = euler_angles
         self.dmax = dmax
@@ -40,8 +33,8 @@ class ResidualDipolarCouplings(object):
     def get_coords(self):
         """Read in the coordinates of the carbon (C) and nitrogen (N) residues
            from a text file."""
-        Ccoords = np.genfromtxt(self.hfile) #change to user input from GUI
-        Ncoords = np.genfromtxt(self.nfile) #change to user input from GUI
+        Ccoords = np.genfromtxt(self.cfile) 
+        Ncoords = np.genfromtxt(self.nfile) 
        
         #slicing
         C_residues = Ccoords[:,0] 
@@ -125,11 +118,8 @@ class ResidualDipolarCouplings(object):
         return rdcs
         
 if __name__ == "__main__":
-    x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.txt', u'h.txt', u'n.txt', 6125)
+    x = ResidualDipolarCouplings([-0.000240977,-0.000429318,0.000670295], [36.9364,139.182,-118.931], u'apo_phage.csv', u'h.txt', u'n.txt', 6125)
     x.get_exp_rdcs()
     x.get_coords()
     x.do_matrix_operations()
     x.back_calculate_rdcs()
-    #x.plot_exp_rdcs
-    
-#import into main file and run??

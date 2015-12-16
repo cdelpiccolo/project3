@@ -16,7 +16,7 @@ import pandas as pd
 import seaborn as sns
 import logging
 import datetime as dt
-import os
+
 
 log_filename = dt.datetime.now().strftime('log_%H_%M_%d_%m_%Y.txt')
 log_filename_final = dt.datetime.now().strftime('final_log_%H_%M_%d_%m_%Y.txt')
@@ -52,7 +52,7 @@ class Pandas(object):
         
     def get_calc_rdcs(self):
         """Read in back-calculated RDCs from a csv file
-           and construct a pandas dataframe."""
+           and construct a pandas Dataframe."""
         calc_df = pd.read_csv('calc_rdcs2.csv')
         logging.info('%s %s' % ('Number of calculated RDCs:', len(calc_df)))
         return calc_df
@@ -76,9 +76,7 @@ class Pandas(object):
         logging.info('%s %s' % ("Possible outliers: ", filter_outliers))
         
         exp_rdc_plot = sns.jointplot(x="Residue Number", y="Experimental RDC", data=rdc_df)
-        print exp_rdc_plot
         pairplot = sns.pairplot(rdc_df, vars=['Experimental RDC', 'Back-Calculated RDC'])
-        print pairplot
         
     def edit_logfile(self):
         """Edit the logfile for clarity."""
@@ -93,7 +91,6 @@ class Pandas(object):
             fout.write(line)
         fin.close()
         fout.close()
-        os.remove(fin)
    
 if __name__ == "__main__":
     x = Pandas()

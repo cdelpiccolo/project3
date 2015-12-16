@@ -12,6 +12,19 @@ The user inputs and the results of the calculations will be output to a
 log file called "final_log_TIME_DATE". 
 The program will then construct plots to compare individual experimental 
 and calculated RDCS  in order to identify possible points of protein dynamics.
+
+EXAMPLE RUN:
+Runs the program for NH Coupling data collected for the apo form of arginine
+kinase in phage media.
+
+Choose NH Coupling.
+Choose Dmax = 21700
+Choose diagonalized matrix / Euler angle input.
+Diagonalized_matrix values: -0.000240977,-0.000429318,0.000670295 
+Euler_angle values: 36.93, 139.18,-118.93
+Experimental RDC File: apo_phage.csv
+H coordinates file: h.txt
+N coordinates file: n.txt 
 """
 
 import numpy as np
@@ -30,7 +43,6 @@ import calc_rdc_caha_saupe
 import calc_rdc_caha_diag
 import qfactor_gui
 import pandas_gui
-import os
 import logging
 import datetime as dt
 
@@ -630,14 +642,14 @@ class Dmax2_Diag_Window(QtGui.QWidget):
         hcoords_file, ok = QtGui.QInputDialog.getText(self, 'H coordinates file', 
                                                       'Enter the name of the file containing the H coordinates.')
         if ok:
-            logging.info('Hydrogen coordinates:', hcoords_file) 
+            logging.info('%s %s' % ('Hydrogen coordinates:', hcoords_file))
             params_list.append(hcoords_file)
     
     def make_ncoords_file_win(self):
         ncoords_file, ok = QtGui.QInputDialog.getText(self, 'N coordinates file', 
                                                       'Enter the name of the file containing the N coordinates.')
         if ok:
-            logging.info('Nitrogen coordinates:', ncoords_file)
+            logging.info('%s %s' % ('Nitrogen coordinates:', ncoords_file)) 
             params_list.append(ncoords_file)
             
             params_list.append(24850) 
@@ -672,7 +684,7 @@ class CN_Saupe_Window(QtGui.QWidget):
         self.make_ncoords_file_win()
         self.run_rdc_calc()
         self.run_pandas()
-#   
+   
     global saupe_list 
     saupe_list = []    
     global diag_list
@@ -868,7 +880,8 @@ class CaHa_Saupe_Window(QtGui.QWidget):
         self.make_cacoords_file_win()
         self.make_hacoords_file_win()
         self.run_rdc_calc()
-#   
+        self.run_pandas()
+   
     global saupe_list 
     saupe_list = []    
     global diag_list
